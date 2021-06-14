@@ -47,6 +47,7 @@ po::options_description GenericCommandHandler::getArchOptions()
     po::options_description specific("Architecture specific options");
     specific.add_options()("generic", "set device type to generic");
     specific.add_options()("no-iobs", "disable automatic IO buffer insertion");
+    specific.add_options()("noestimate", "disable routing estimation");
     return specific;
 }
 
@@ -63,6 +64,8 @@ std::unique_ptr<Context> GenericCommandHandler::createContext(dict<std::string, 
     auto ctx = std::unique_ptr<Context>(new Context(chipArgs));
     if (vm.count("no-iobs"))
         ctx->settings[ctx->id("disable_iobs")] = Property::State::S1;
+    if (vm.count("noestimate"))
+        ctx->settings[ctx->id("router1/useEstimate")] = false;
     return ctx;
 }
 
