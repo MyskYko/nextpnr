@@ -164,7 +164,7 @@ static void pack_constants(Context *ctx)
         if (ni->driver.cell != nullptr && ni->driver.cell->type == ctx->id("GND")) {
             IdString drv_cell = ni->driver.cell->name;
             set_net_constant(ctx, ni, gnd_net.get(), false);
-            gnd_used = true;
+	    //            gnd_used = true;
             dead_nets.push_back(net.first);
             ctx->cells.erase(drv_cell);
         } else if (ni->driver.cell != nullptr && ni->driver.cell->type == ctx->id("VCC")) {
