@@ -52,6 +52,11 @@
 #include "timing.h"
 #include "util.h"
 
+#ifndef NPNR_DISABLE_THREADS
+#define NPNR_DISABLE_THREADS
+#define NPNR_DISABLED_THREADS
+#endif
+
 NEXTPNR_NAMESPACE_BEGIN
 
 namespace {
@@ -346,9 +351,9 @@ class HeAPPlacer
         ctx->check();
         lock.unlock_early();
 
-        if (!placer1_refine(ctx, Placer1Cfg(ctx))) {
-            return false;
-        }
+        // if (!placer1_refine(ctx, Placer1Cfg(ctx))) {
+        //     return false;
+        // }
 
         return true;
     }
@@ -1796,6 +1801,11 @@ PlacerHeapCfg::PlacerHeapCfg(Context *ctx)
 }
 
 NEXTPNR_NAMESPACE_END
+
+#ifdef NPNR_DISABLED_THREADS
+#undef NPNR_DISABLE_THREADS
+#undef NPNR_DISABLED_THREADS
+#endif
 
 #else
 
