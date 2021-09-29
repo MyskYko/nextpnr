@@ -69,6 +69,9 @@ std::unique_ptr<Context> GenericCommandHandler::createContext(dict<std::string, 
         ctx->settings[ctx->id("router1/useEstimate")] = false;
     if (vm.count("timelimit"))
         ctx->settings[ctx->id("timelimit")] = std::to_string(vm["timelimit"].as<double>());
+    if (ctx->settings.find(ctx->id("timelimit")) == ctx->settings.end())
+        ctx->settings[ctx->id("timelimit")] = std::to_string(0);
+
     return ctx;
 }
 

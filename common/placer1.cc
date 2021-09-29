@@ -309,7 +309,7 @@ class SAPlacer
             else
                 n_no_progress++;
 
-            if (/*temp <= 1e-7 && n_no_progress >= (refine ? 1 : 5)*/ std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - saplace_start).count() >= cfg.timelimit) {
+            if ((cfg.timelimit == 0 && temp <= 1e-7 && n_no_progress >= (refine ? 1 : 5)) || (cfg.timelimit != 0 && std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - saplace_start).count() >= cfg.timelimit)) {
                 log_info("  at iteration #%d: temp = %f, timing cost = "
                          "%.0f, wirelen = %.0f \n",
                          iter, temp, double(curr_timing_cost), double(curr_wirelen_cost));

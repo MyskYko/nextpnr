@@ -223,7 +223,7 @@ class HeAPPlacer
         heap_runs.push_back(all_buckets);
         // The main HeAP placer loop
         log_info("Running main analytical placer.\n");
-        while (/*stalled < 5 && (solved_hpwl <= legal_hpwl * 0.8)*/ solve_time + sl_time + cl_time < cfg.timelimit) {
+        while ((cfg.timelimit == 0 && stalled < 5 && (solved_hpwl <= legal_hpwl * 0.8)) || (cfg.timelimit != 0 && solve_time + sl_time + cl_time < cfg.timelimit)) {
             // Alternate between particular bel types and all bels
             for (auto &run : heap_runs) {
                 auto run_startt = std::chrono::high_resolution_clock::now();
