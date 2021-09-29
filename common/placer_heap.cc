@@ -223,7 +223,7 @@ class HeAPPlacer
         heap_runs.push_back(all_buckets);
         // The main HeAP placer loop
         log_info("Running main analytical placer.\n");
-        while (stalled < 5 && (solved_hpwl <= legal_hpwl * 0.8)) {
+        while (/*stalled < 5 && (solved_hpwl <= legal_hpwl * 0.8)*/ solve_time + sl_time + cl_time < cfg.timelimit) {
             // Alternate between particular bel types and all bels
             for (auto &run : heap_runs) {
                 auto run_startt = std::chrono::high_resolution_clock::now();
@@ -272,7 +272,7 @@ class HeAPPlacer
                 auto run_stopt = std::chrono::high_resolution_clock::now();
 
                 IdString bucket_name = ctx->getBelBucketName(*run.begin());
-                log_info("    at iteration #%d, type %s: wirelen solved = %d, spread = %d, legal = %d; time = %.02fs\n",
+                log_info("    at iteration #%d, type %s: wirelen solved = %d, spread = %d, legal = %d; time = %.fs\n",
                          iter + 1, (run.size() > 1 ? "ALL" : bucket_name.c_str(ctx)), int(solved_hpwl),
                          int(spread_hpwl), int(legal_hpwl),
                          std::chrono::duration<double>(run_stopt - run_startt).count());
@@ -343,10 +343,10 @@ class HeAPPlacer
         }
 
         auto endtt = std::chrono::high_resolution_clock::now();
-        log_info("HeAP Placer Time: %.02fs\n", std::chrono::duration<double>(endtt - startt).count());
-        log_info("  of which solving equations: %.02fs\n", solve_time);
-        log_info("  of which spreading cells: %.02fs\n", cl_time);
-        log_info("  of which strict legalisation: %.02fs\n", sl_time);
+        log_info("HeAP Placer Time: %.fs\n", std::chrono::duration<double>(endtt - startt).count());
+        log_info("  of which solving equations: %.fs\n", solve_time);
+        log_info("  of which spreading cells: %.fs\n", cl_time);
+        log_info("  of which strict legalisation: %.fs\n", sl_time);
 
         ctx->check();
         lock.unlock_early();
@@ -1793,6 +1793,7 @@ PlacerHeapCfg::PlacerHeapCfg(Context *ctx)
     timing_driven = ctx->setting<bool>("timing_driven");
     solverTolerance = 1e-5;
     placeAllAtOnce = false;
+    timelimit = ctx->setting<double>("timelimit");
 
     hpwl_scale_x = 1;
     hpwl_scale_y = 1;

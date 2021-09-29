@@ -48,6 +48,7 @@ po::options_description GenericCommandHandler::getArchOptions()
     specific.add_options()("generic", "set device type to generic");
     specific.add_options()("no-iobs", "disable automatic IO buffer insertion");
     specific.add_options()("noestimate", "disable routing estimation");
+    specific.add_options()("timelimit", po::value<double>(), "placer time limit");
     return specific;
 }
 
@@ -66,6 +67,8 @@ std::unique_ptr<Context> GenericCommandHandler::createContext(dict<std::string, 
         ctx->settings[ctx->id("disable_iobs")] = Property::State::S1;
     if (vm.count("noestimate"))
         ctx->settings[ctx->id("router1/useEstimate")] = false;
+    if (vm.count("timelimit"))
+        ctx->settings[ctx->id("timelimit")] = std::to_string(vm["timelimit"].as<double>());
     return ctx;
 }
 

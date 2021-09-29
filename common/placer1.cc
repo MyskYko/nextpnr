@@ -206,7 +206,7 @@ class SAPlacer
                 assign_budget(ctx);
             ctx->yield();
             auto iplace_end = std::chrono::high_resolution_clock::now();
-            log_info("Initial placement time %.02fs\n",
+            log_info("Initial placement time %.fs\n",
                      std::chrono::duration<float>(iplace_end - iplace_start).count());
             log_info("Running simulated annealing placer.\n");
         } else {
@@ -309,7 +309,7 @@ class SAPlacer
             else
                 n_no_progress++;
 
-            if (temp <= 1e-7 && n_no_progress >= (refine ? 1 : 5)) {
+            if (/*temp <= 1e-7 && n_no_progress >= (refine ? 1 : 5)*/ std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - saplace_start).count() >= cfg.timelimit) {
                 log_info("  at iteration #%d: temp = %f, timing cost = "
                          "%.0f, wirelen = %.0f \n",
                          iter, temp, double(curr_timing_cost), double(curr_wirelen_cost));
@@ -387,7 +387,7 @@ class SAPlacer
         }
 
         auto saplace_end = std::chrono::high_resolution_clock::now();
-        log_info("SA placement time %.02fs\n", std::chrono::duration<float>(saplace_end - saplace_start).count());
+        log_info("SA placement time %.fs\n", std::chrono::duration<float>(saplace_end - saplace_start).count());
 
         // Final post-placement validity check
         ctx->yield();
@@ -1217,6 +1217,7 @@ Placer1Cfg::Placer1Cfg(Context *ctx)
     timingFanoutThresh = std::numeric_limits<int>::max();
     timing_driven = ctx->setting<bool>("timing_driven");
     slack_redist_iter = ctx->setting<int>("slack_redist_iter");
+    timelimit = ctx->setting<double>("timelimit");
     hpwl_scale_x = 1;
     hpwl_scale_y = 1;
 }
