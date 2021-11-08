@@ -206,7 +206,7 @@ class SAPlacer
                 assign_budget(ctx);
             ctx->yield();
             auto iplace_end = std::chrono::high_resolution_clock::now();
-            log_info("Initial placement time %.fs\n",
+            log_info("Initial placement time %fs\n",
                      std::chrono::duration<float>(iplace_end - iplace_start).count());
             log_info("Running simulated annealing placer.\n");
         } else {
@@ -387,7 +387,7 @@ class SAPlacer
         }
 
         auto saplace_end = std::chrono::high_resolution_clock::now();
-        log_info("SA placement time %.fs\n", std::chrono::duration<float>(saplace_end - saplace_start).count());
+        log_info("SA placement time %fs\n", std::chrono::duration<float>(saplace_end - saplace_start).count());
 
         // Final post-placement validity check
         ctx->yield();

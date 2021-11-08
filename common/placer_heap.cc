@@ -272,7 +272,7 @@ class HeAPPlacer
                 auto run_stopt = std::chrono::high_resolution_clock::now();
 
                 IdString bucket_name = ctx->getBelBucketName(*run.begin());
-                log_info("    at iteration #%d, type %s: wirelen solved = %d, spread = %d, legal = %d; time = %.fs\n",
+                log_info("    at iteration #%d, type %s: wirelen solved = %d, spread = %d, legal = %d; time = %fs\n",
                          iter + 1, (run.size() > 1 ? "ALL" : bucket_name.c_str(ctx)), int(solved_hpwl),
                          int(spread_hpwl), int(legal_hpwl),
                          std::chrono::duration<double>(run_stopt - run_startt).count());
@@ -343,10 +343,10 @@ class HeAPPlacer
         }
 
         auto endtt = std::chrono::high_resolution_clock::now();
-        log_info("HeAP Placer Time: %.fs\n", std::chrono::duration<double>(endtt - startt).count());
-        log_info("  of which solving equations: %.fs\n", solve_time);
-        log_info("  of which spreading cells: %.fs\n", cl_time);
-        log_info("  of which strict legalisation: %.fs\n", sl_time);
+        log_info("HeAP Placer Time: %fs\n", std::chrono::duration<double>(endtt - startt).count());
+        log_info("  of which solving equations: %fs\n", solve_time);
+        log_info("  of which spreading cells: %fs\n", cl_time);
+        log_info("  of which strict legalisation: %fs\n", sl_time);
 
         ctx->check();
         lock.unlock_early();
